@@ -92,7 +92,7 @@ module.exports = (robot) ->
   #
   # Actually dispatch deployment requests to GitHub
   robot.respond DeployPattern, id: "hubot-deploy.create", hubotDeployAuthenticate: true, (msg) ->
-    task  = msg.match[1].replace(DeployPrefix, "deploy")
+    task  = msg.match[1].replace("#{DeployPrefix}:", "")
     force = msg.match[2] == '!'
     name  = msg.match[3]
     ref   = (msg.match[4]||'master')
