@@ -111,6 +111,7 @@ class Deployment
     repository = @repository
     env        = @env
     ref        = @ref
+    task       = @task
 
     requiredContexts = @requiredContexts
 
@@ -119,6 +120,8 @@ class Deployment
 
       if err
         data = err
+
+      success = status == 201
 
       if data['message']
         bodyMessage = data['message']
@@ -159,6 +162,9 @@ class Deployment
           message = "Unable to create deployments for #{repository}. Check your scopes for this token."
         else
           message = bodyMessage
+
+      if success and not message
+        message = "#{task}ing #{name}/#{ref} to #{env}"
 
       callback(err, status, body, headers, message)
 
