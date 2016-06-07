@@ -6,7 +6,7 @@ scriptPrefix = process.env['HUBOT_DEPLOY_PREFIX'] || "deploy"
 
 # The :hammer: regex that handles all /deploy requests
 DEPLOY_SYNTAX = ///
-  (#{scriptPrefix}(?:\:[^\s]+)?)        # / prefix
+  (#{scriptPrefix}(?:\:[^\s^!]+)?)      # / prefix
   (!)?\s+                               # Whether or not it was a forced deployment
   #{validSlug}                          # application name, from apps.json
   (?:\/([^\s]+))?                       # Branch or sha to deploy
