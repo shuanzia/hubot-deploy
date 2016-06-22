@@ -38,7 +38,7 @@ module.exports = (robot) ->
       deployment = new Deployment(name)
       formatter  = new Formatters.WhereFormatter(deployment)
 
-      robot.emit "hubot_deploy_available_environments", msg, deployment, formatter
+      msg.reply formatter.message()
 
     catch err
       robot.logger.info "Exploded looking for deployment locations: #{err}"
@@ -82,7 +82,7 @@ module.exports = (robot) ->
 
       deployment.latest (err, deployments) ->
         formatter = new Formatters.LatestFormatter(deployment, deployments)
-        robot.emit "hubot_deploy_recent_deployments", msg, deployment, deployments, formatter
+        msg.reply formatter.message()
 
     catch err
       robot.logger.info "Exploded looking for recent deployments: #{err}"
