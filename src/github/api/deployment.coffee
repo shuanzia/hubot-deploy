@@ -112,6 +112,7 @@ class Deployment
     env        = @env
     ref        = @ref
     task       = @task
+    hosts      = @hosts
 
     requiredContexts = @requiredContexts
 
@@ -165,6 +166,8 @@ class Deployment
 
       if success and not message
         message = "#{task}ing #{name}/#{ref} to #{env}"
+        if hosts
+          message = "#{message}/#{hosts}"
 
       callback(err, status, body, headers, message)
 
