@@ -1,6 +1,6 @@
 Inflection = require "inflection"
 
-validSlug = "([-_\.0-9a-z]+)"
+validSlug = "([-_\.0-9a-z\:]+)"
 
 scriptPrefix = process.env['HUBOT_DEPLOY_PREFIX'] || "deploy"
 
