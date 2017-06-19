@@ -5,10 +5,30 @@ Fernet    = require "fernet"
 Version   = require(Path.join(__dirname, "..", "..", "version")).Version
 Octonode  = require "octonode"
 GitHubApi = require(Path.join(__dirname, "..", "api")).Api
-###########################################################################
+extend    = require "node.extend"
 
+AppsFile = process.env['HUBOT_DEPLOY_APPS_JSON'] or "apps.json"
+AppsDirPath = process.env['HUBOT_DEPLOY_APPS_DIR_PATH'] or path.resolve("./apps")
+###########################################################################
+readAppsConfig = () ->
+  appsConfig = {}
+  try
+    if fs.existsSync(AppsFile) && fs.statSync(AppsFile).isFile()
+      appsConfig = JSON.parse(fs.readFileSync(AppsFile).toString())
+
+    if fs.existsSync(AppsDirPath) && fs.statSync(AppsDirPath).isDirectory()
+      for appsJSONFile in fs.readdirSync(AppsDirPath).sort()
+        if fs.statSync(path.join(AppsDirPath, appsJSONFile)).isFile()
+          config = JSON.parse fs.readFileSync(path.join(AppsDirPath, appsJSONFile)).toString()
+          appsConfig = extend applications,config
+  catch err
+    throw new Error("Unable to parse your apps.json file in hubot-deploy #{err}")
+
+  appsConfig
+
+applications = readAppsConfig()
+###########################################################################
 class Deployment
-  @APPS_FILE = process.env['HUBOT_DEPLOY_APPS_JSON'] or "apps.json"
 
   constructor: (@name, @ref, @task, @env, @force, @hosts) ->
     @room             = 'unknown'
@@ -23,11 +43,6 @@ class Deployment
 
     @messageId        = undefined
     @threadId         = undefined
-
-    try
-      applications = JSON.parse(Fs.readFileSync(@constructor.APPS_FILE).toString())
-    catch
-      throw new Error("Unable to parse your apps.json file in hubot-deploy")
 
     @application = applications[@name]
 
