@@ -8,19 +8,19 @@ GitHubApi = require(Path.join(__dirname, "..", "api")).Api
 extend    = require "node.extend"
 
 AppsFile = process.env['HUBOT_DEPLOY_APPS_JSON'] or "apps.json"
-AppsDirPath = process.env['HUBOT_DEPLOY_APPS_DIR_PATH'] or path.resolve("./apps")
+AppsDirPath = process.env['HUBOT_DEPLOY_APPS_DIR_PATH'] or Path.resolve("./apps")
 ###########################################################################
 readAppsConfig = () ->
   appsConfig = {}
   try
-    if fs.existsSync(AppsFile) && fs.statSync(AppsFile).isFile()
-      appsConfig = JSON.parse(fs.readFileSync(AppsFile).toString())
+    if Fs.existsSync(AppsFile) && Fs.statSync(AppsFile).isFile()
+      appsConfig = JSON.parse(Fs.readFileSync(AppsFile).toString())
 
-    if fs.existsSync(AppsDirPath) && fs.statSync(AppsDirPath).isDirectory()
-      for appsJSONFile in fs.readdirSync(AppsDirPath).sort()
-        if fs.statSync(path.join(AppsDirPath, appsJSONFile)).isFile()
-          config = JSON.parse fs.readFileSync(path.join(AppsDirPath, appsJSONFile)).toString()
-          appsConfig = extend applications,config
+    if Fs.existsSync(AppsDirPath) && Fs.statSync(AppsDirPath).isDirectory()
+      for appsJSONFile in Fs.readdirSync(AppsDirPath).sort()
+        if Fs.statSync(Path.join(AppsDirPath, appsJSONFile)).isFile()
+          config = JSON.parse Fs.readFileSync(Path.join(AppsDirPath, appsJSONFile)).toString()
+          appsConfig = extend appsConfig,config
   catch err
     throw new Error("Unable to parse your apps.json file in hubot-deploy #{err}")
 
